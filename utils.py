@@ -1,0 +1,1 @@
+def split(s): return s.split()
