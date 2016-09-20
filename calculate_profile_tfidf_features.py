@@ -98,12 +98,6 @@ del df_urls
 
 # In[37]:
 
-print 'reading train from elastic search...'
-
-with open('tmp/es-retrieved-nodup-50-more.bin', 'rb') as f:
-    df_train_pairs = cPickle.load(f)
-
-
 
 # In[41]:
 print 'reading profiles...'
@@ -228,10 +222,14 @@ def process_batch(batch):
 
 # In[121]:
 
+
+print 'reading train from elastic search...'
+
+with open('tmp/es-retrieved-nodup-50-more.bin', 'rb') as f:
+    df_train_pairs = cPickle.load(f)
+
 print 'calculating features for train...'
-
-train_file = 'pair_features_tfidf_profiles_train.csv'
-
+train_file = 'pair_features_tfidf_profiles_test.csv'
 delete_file_if_exists(train_file)
 
 df = df_train_pairs
@@ -241,8 +239,22 @@ for batch_no, batch in tqdm(list(prepare_batches(df, batch_size))):
     batch = process_batch(batch)
     append_to_csv(batch, train_file)
 
-
-# In[ ]:
-
+del df, df_train_pairs
 
 
+print 'reading test from elastic search...'
+
+with open('tmp/es-retrieved-nodup-50_test.bin', 'rb') as f:
+    df_test_pairs = cPickle.load(f)
+
+print 'calculating features for test...'
+train_file = 'pair_features_tfidf_profiles_test.csv'
+
+delete_file_if_exists(train_file)
+
+df = df_test_pairs
+batch_size = 10000
+
+for batch_no, batch in tqdm(list(prepare_batches(df, batch_size))):
+    batch = process_batch(batch)
+    append_to_csv(batch, train_file)
