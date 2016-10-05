@@ -162,7 +162,7 @@ for _, row in df_perf_test.iterrows():
 df_test_dedup = pd.DataFrame(df_test_dedup)
 df_test_dedup.columns = ['user_1', 'user_2', 'model_score']
 
-df_certain = df_test_dedup[df_test_dedup.avg_score >= 0.8]
+df_certain = df_test_dedup[df_test_dedup.model_score >= 0.8]
 
 
 
