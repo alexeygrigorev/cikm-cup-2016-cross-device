@@ -1,8 +1,6 @@
 
 # coding: utf-8
 
-# In[103]:
-
 import json
 
 import pandas as pd
@@ -35,8 +33,6 @@ print 'reading urls...'
 
 with open('tmp/df_urls.bin', 'rb') as f:
     df_urls = cPickle.load(f)
-df_urls.head()
-
 
 # In[4]:
 
@@ -103,14 +99,6 @@ del df_urls
 print 'reading profiles...'
 
 df_profiles = pd.read_csv('./user_profiles.txt', dtype='float32')
-
-del df_profiles['domain_cos_amax']
-del df_profiles['domain_svd_cos_amax']
-del df_profiles['title_cos_amax']
-del df_profiles['title_svd_cos_amax']
-del df_profiles['url_cos_amax']
-del df_profiles['url_svd_cos_amax']
-
 
 # In[51]:
 
@@ -225,11 +213,11 @@ def process_batch(batch):
 
 print 'reading train from elastic search...'
 
-with open('tmp/es-retrieved-nodup-50-more.bin', 'rb') as f:
+with open('tmp/es-retrieved-70.bin', 'rb') as f:
     df_train_pairs = cPickle.load(f)
 
 print 'calculating features for train...'
-train_file = 'pair_features_tfidf_profiles_test.csv'
+train_file = 'pair_features_tfidf_profiles_train.csv'
 delete_file_if_exists(train_file)
 
 df = df_train_pairs
@@ -244,17 +232,17 @@ del df, df_train_pairs
 
 print 'reading test from elastic search...'
 
-with open('tmp/es-retrieved-nodup-50_test.bin', 'rb') as f:
+with open('tmp/es-retrieved-70_test.bin', 'rb') as f:
     df_test_pairs = cPickle.load(f)
 
 print 'calculating features for test...'
-train_file = 'pair_features_tfidf_profiles_test.csv'
+test_file = 'pair_features_tfidf_profiles_test.csv'
 
-delete_file_if_exists(train_file)
+delete_file_if_exists(test_file)
 
 df = df_test_pairs
 batch_size = 10000
 
 for batch_no, batch in tqdm(list(prepare_batches(df, batch_size))):
     batch = process_batch(batch)
-    append_to_csv(batch, train_file)
+    append_to_csv(batch, test_file)
