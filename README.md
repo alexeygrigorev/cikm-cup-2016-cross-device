@@ -31,3 +31,6 @@ More details at http://cikmcup.org and https://competitions.codalab.org/competit
 - `7_model.py`: trains the xgb model and creates the submission file
 
 
+## Presentation
+
+- This solution was presented at Berlin Machine Learning meetup. See the slides [here](http://www.slideshare.net/AlexeyGrigorev/cikm-cup-2016-crossdevice-linking).
